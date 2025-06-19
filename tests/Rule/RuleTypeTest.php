@@ -98,28 +98,30 @@ class RuleTypeTest extends TestCase
      */
     public function testRuleType_conditionalStatements(): void
     {
-        $type = RuleType::EQUAL;
-
-        $result = match ($type) {
+        // Test EQUAL case
+        $equalResult = match (RuleType::EQUAL) {
             RuleType::EQUAL => 'equal',
-            RuleType::LT => 'less than',
-            RuleType::LTE => 'less than or equal',
-            RuleType::GT => 'greater than',
-            RuleType::GTE => 'greater than or equal',
+            default => 'other'
         };
+        $this->assertEquals('equal', $equalResult);
 
-        $this->assertEquals('equal', $result);
-
-        $type = RuleType::GT;
-
-        $result = match ($type) {
-            RuleType::EQUAL => 'equal',
-            RuleType::LT => 'less than',
-            RuleType::LTE => 'less than or equal',
+        // Test GT case  
+        $gtResult = match (RuleType::GT) {
             RuleType::GT => 'greater than',
-            RuleType::GTE => 'greater than or equal',
+            default => 'other'
         };
+        $this->assertEquals('greater than', $gtResult);
 
-        $this->assertEquals('greater than', $result);
+        // Test all enum values
+        foreach (RuleType::cases() as $type) {
+            $result = match ($type) {
+                RuleType::EQUAL => 'equal',
+                RuleType::LT => 'less than',
+                RuleType::LTE => 'less than or equal',
+                RuleType::GT => 'greater than',
+                RuleType::GTE => 'greater than or equal',
+            };
+            $this->assertIsString($result);
+        }
     }
 }

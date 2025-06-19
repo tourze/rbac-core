@@ -149,7 +149,7 @@ class MutexRoleTest extends TestCase
 
             public function getMutexRoles(): array
             {
-                return $this->accountantRole ? [$this->accountantRole] : [];
+                return $this->accountantRole !== null ? [$this->accountantRole] : [];
             }
         };
 
@@ -160,7 +160,8 @@ class MutexRoleTest extends TestCase
             public function __construct(Role $auditor)
             {
                 $this->auditorRole = $auditor;
-                if ($this->auditorRole instanceof MutexRole) {
+                // Set bidirectional relationship for test
+                if (method_exists($this->auditorRole, 'setMutexRole')) {
                     $this->auditorRole->setMutexRole($this);
                 }
             }
