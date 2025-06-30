@@ -45,7 +45,7 @@ class PreconditionRoleTest extends TestCase
                 return '编辑者';
             }
 
-            public function getPreconditionRole(): ?Role
+            public function getPreconditionRole(): Role
             {
                 return $this->preconditionRole;
             }
@@ -96,7 +96,7 @@ class PreconditionRoleTest extends TestCase
                 return '编辑者';
             }
 
-            public function getPreconditionRole(): ?Role
+            public function getPreconditionRole(): Role
             {
                 return $this->preconditionRole;
             }
@@ -104,9 +104,9 @@ class PreconditionRoleTest extends TestCase
 
         // 创建需要编辑者角色的管理员角色
         $adminRole = new class($editorRole) implements Role, PreconditionRole {
-            private PreconditionRole $preconditionRole;
+            private Role $preconditionRole;
 
-            public function __construct(PreconditionRole $preconditionRole)
+            public function __construct(Role $preconditionRole)
             {
                 $this->preconditionRole = $preconditionRole;
             }
@@ -121,7 +121,7 @@ class PreconditionRoleTest extends TestCase
                 return '管理员';
             }
 
-            public function getPreconditionRole(): ?Role
+            public function getPreconditionRole(): Role
             {
                 return $this->preconditionRole;
             }
@@ -194,7 +194,7 @@ class PreconditionRoleTest extends TestCase
                 $this->preconditionRole = $role;
             }
 
-            public function getPreconditionRole(): ?Role
+            public function getPreconditionRole(): Role
             {
                 return $this->preconditionRole;
             }
@@ -219,7 +219,7 @@ class PreconditionRoleTest extends TestCase
                 return '角色2';
             }
 
-            public function getPreconditionRole(): ?Role
+            public function getPreconditionRole(): Role
             {
                 return $this->preconditionRole;
             }

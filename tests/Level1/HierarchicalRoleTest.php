@@ -104,9 +104,9 @@ class HierarchicalRoleTest extends TestCase
 
         // 创建管理员角色
         $adminRole = new class($editorRole) implements Role, HierarchicalRole {
-            private HierarchicalRole $parentRole;
+            private Role $parentRole;
 
-            public function __construct(HierarchicalRole $parentRole)
+            public function __construct(Role $parentRole)
             {
                 $this->parentRole = $parentRole;
             }

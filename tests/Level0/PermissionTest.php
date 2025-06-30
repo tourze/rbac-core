@@ -78,7 +78,7 @@ class PermissionTest extends TestCase
                 return '编辑用户';
             }
 
-            public function getParentPermission(): ?Permission
+            public function getParentPermission(): Permission
             {
                 return $this->parentPermission;
             }
@@ -134,7 +134,7 @@ class PermissionTest extends TestCase
                 return '用户管理';
             }
 
-            public function getParentPermission(): ?Permission
+            public function getParentPermission(): Permission
             {
                 return $this->parentPermission;
             }
@@ -159,7 +159,7 @@ class PermissionTest extends TestCase
                 return '删除用户';
             }
 
-            public function getParentPermission(): ?Permission
+            public function getParentPermission(): Permission
             {
                 return $this->parentPermission;
             }
