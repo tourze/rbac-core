@@ -2,15 +2,20 @@
 
 namespace Tourze\RBAC\Core\Tests\Level0;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 
-class RoleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Role::class)]
+final class RoleTest extends TestCase
 {
     /**
      * 测试 Role 接口的基本实现
      */
-    public function testRole_basicImplementation(): void
+    public function testRoleBasicImplementation(): void
     {
         // 创建 Role 接口的匿名实现
         $role = new class implements Role {
@@ -33,7 +38,7 @@ class RoleTest extends TestCase
     /**
      * 测试多个角色创建
      */
-    public function testRole_multipleRoles(): void
+    public function testRoleMultipleRoles(): void
     {
         // 创建普通用户角色
         $userRole = new class implements Role {
@@ -88,7 +93,7 @@ class RoleTest extends TestCase
     /**
      * 测试特殊字符角色名
      */
-    public function testRole_specialCharactersInName(): void
+    public function testRoleSpecialCharactersInName(): void
     {
         // 创建含特殊字符的角色名
         $role = new class implements Role {
@@ -111,7 +116,7 @@ class RoleTest extends TestCase
     /**
      * 测试空标题角色
      */
-    public function testRole_emptyTitle(): void
+    public function testRoleEmptyTitle(): void
     {
         // 创建空标题的角色
         $role = new class implements Role {

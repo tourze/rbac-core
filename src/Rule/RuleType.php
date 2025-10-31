@@ -12,7 +12,7 @@ enum RuleType: string implements Itemable, Labelable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-    
+
     case EQUAL = 'equal';
     case LT = 'lt';
     case LTE = 'lte';

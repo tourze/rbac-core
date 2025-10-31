@@ -2,16 +2,21 @@
 
 namespace Tourze\RBAC\Core\Tests\Level1;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Level1\HierarchicalRole;
 
-class HierarchicalRoleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HierarchicalRole::class)]
+final class HierarchicalRoleTest extends TestCase
 {
     /**
      * 测试 HierarchicalRole 接口的基本实现
      */
-    public function testHierarchicalRole_basicImplementation(): void
+    public function testHierarchicalRoleBasicImplementation(): void
     {
         // 创建基础角色
         $userRole = new class implements Role {
@@ -62,7 +67,7 @@ class HierarchicalRoleTest extends TestCase
     /**
      * 测试多级继承角色
      */
-    public function testHierarchicalRole_multiLevelInheritance(): void
+    public function testHierarchicalRoleMultiLevelInheritance(): void
     {
         // 创建基础角色
         $userRole = new class implements Role {
@@ -143,7 +148,7 @@ class HierarchicalRoleTest extends TestCase
     /**
      * 测试多个父角色
      */
-    public function testHierarchicalRole_multipleParentRoles(): void
+    public function testHierarchicalRoleMultipleParentRoles(): void
     {
         // 创建基础角色 - 内容创建者
         $contentCreatorRole = new class implements Role {
@@ -173,6 +178,7 @@ class HierarchicalRoleTest extends TestCase
 
         // 创建编辑者角色，继承多个父角色
         $editorRole = new class($contentCreatorRole, $contentReviewerRole) implements Role, HierarchicalRole {
+            /** @var array<Role> */
             private array $parentRoles;
 
             public function __construct(Role $contentCreator, Role $contentReviewer)
@@ -207,7 +213,7 @@ class HierarchicalRoleTest extends TestCase
     /**
      * 测试没有父角色的层级角色
      */
-    public function testHierarchicalRole_withNoParentRoles(): void
+    public function testHierarchicalRoleWithNoParentRoles(): void
     {
         // 创建没有父角色的层级角色
         $rootRole = new class implements Role, HierarchicalRole {

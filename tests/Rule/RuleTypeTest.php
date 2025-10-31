@@ -2,15 +2,20 @@
 
 namespace Tourze\RBAC\Core\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 use Tourze\RBAC\Core\Rule\RuleType;
 
-class RuleTypeTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(RuleType::class)]
+final class RuleTypeTest extends AbstractEnumTestCase
 {
     /**
      * 测试 RuleType 枚举的基本使用
      */
-    public function testRuleType_basicUsage(): void
+    public function testRuleTypeBasicUsage(): void
     {
         // 测试所有枚举值
         $this->assertEquals('equal', RuleType::EQUAL->value);
@@ -23,7 +28,7 @@ class RuleTypeTest extends TestCase
     /**
      * 测试枚举值的比较
      */
-    public function testRuleType_comparison(): void
+    public function testRuleTypeComparison(): void
     {
         $equalType = RuleType::EQUAL;
         $ltType = RuleType::LT;
@@ -38,17 +43,17 @@ class RuleTypeTest extends TestCase
         $this->assertSame($gtType, RuleType::GT);
         $this->assertSame($gteType, RuleType::GTE);
 
-        // 测试不同枚举值的比较
-        $this->assertNotSame($equalType, $ltType);
-        $this->assertNotSame($ltType, $lteType);
-        $this->assertNotSame($gtType, $gteType);
-        $this->assertNotSame($equalType, $gtType);
+        // 测试不同枚举值的 value 属性比较
+        $this->assertNotEquals($equalType->value, $ltType->value);
+        $this->assertNotEquals($ltType->value, $lteType->value);
+        $this->assertNotEquals($gtType->value, $gteType->value);
+        $this->assertNotEquals($equalType->value, $gtType->value);
     }
 
     /**
      * 测试将枚举转换为字符串
      */
-    public function testRuleType_stringConversion(): void
+    public function testRuleTypeStringConversion(): void
     {
         $this->assertEquals('equal', RuleType::EQUAL->value);
         $this->assertEquals('lt', RuleType::LT->value);
@@ -60,7 +65,7 @@ class RuleTypeTest extends TestCase
     /**
      * 测试从字符串创建枚举
      */
-    public function testRuleType_fromString(): void
+    public function testRuleTypeFromString(): void
     {
         $equalType = RuleType::from('equal');
         $ltType = RuleType::from('lt');
@@ -78,7 +83,7 @@ class RuleTypeTest extends TestCase
     /**
      * 测试非法字符串值的异常处理
      */
-    public function testRuleType_invalidString(): void
+    public function testRuleTypeInvalidString(): void
     {
         $this->expectException(\ValueError::class);
         RuleType::from('invalid_rule_type');
@@ -87,7 +92,7 @@ class RuleTypeTest extends TestCase
     /**
      * 测试通过 tryFrom 方法处理非法字符串
      */
-    public function testRuleType_tryFromWithInvalidString(): void
+    public function testRuleTypeTryFromWithInvalidString(): void
     {
         $result = RuleType::tryFrom('invalid_rule_type');
         $this->assertNull($result);
@@ -96,13 +101,13 @@ class RuleTypeTest extends TestCase
     /**
      * 测试使用枚举进行条件语句
      */
-    public function testRuleType_conditionalStatements(): void
+    public function testRuleTypeConditionalStatements(): void
     {
         // Test EQUAL case
         $equalResult = 'equal'; // Since we're matching a constant, the result is always 'equal'
         $this->assertEquals('equal', $equalResult);
 
-        // Test GT case  
+        // Test GT case
         $gtResult = 'greater than'; // Since we're matching a constant, the result is always 'greater than'
         $this->assertEquals('greater than', $gtResult);
 
@@ -117,7 +122,7 @@ class RuleTypeTest extends TestCase
                 RuleType::GTE => 'greater than or equal',
             };
         }
-        
+
         // Verify we have results for all enum values
         $this->assertCount(5, $results);
         $this->assertArrayHasKey('equal', $results);
@@ -126,4 +131,31 @@ class RuleTypeTest extends TestCase
         $this->assertArrayHasKey('gt', $results);
         $this->assertArrayHasKey('gte', $results);
     }
+
+    /**
+     * 测试 toArray 方法
+     */
+    public function testToArray(): void
+    {
+        $ruleType = RuleType::EQUAL;
+        $array = $ruleType->toArray();
+
+        $this->assertIsArray($array);
+        $this->assertCount(2, $array);
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+
+        $this->assertEquals('equal', $array['value']);
+        $this->assertEquals('等于', $array['label']);
+
+        // 测试其他枚举值
+        $ltType = RuleType::LT;
+        $ltArray = $ltType->toArray();
+        $this->assertEquals('lt', $ltArray['value']);
+        $this->assertEquals('小于', $ltArray['label']);
+    }
+
+    /**
+     * 测试 toSelectItem 方法
+     */
 }

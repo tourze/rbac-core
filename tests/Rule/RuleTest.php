@@ -2,16 +2,21 @@
 
 namespace Tourze\RBAC\Core\Tests\Rule;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Rule\Rule;
 use Tourze\RBAC\Core\Rule\RuleType;
 
-class RuleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Rule::class)]
+final class RuleTest extends TestCase
 {
     /**
      * 测试 Rule 接口的基本实现
      */
-    public function testRule_basicImplementation(): void
+    public function testRuleBasicImplementation(): void
     {
         // 创建规则
         $rule = new class implements Rule {
@@ -46,7 +51,7 @@ class RuleTest extends TestCase
     /**
      * 测试不同类型的规则
      */
-    public function testRule_differentTypes(): void
+    public function testRuleDifferentTypes(): void
     {
         // 创建等于类型规则
         $equalRule = new class implements Rule {
@@ -188,7 +193,7 @@ class RuleTest extends TestCase
     /**
      * 测试不同值类型的规则
      */
-    public function testRule_differentValueTypes(): void
+    public function testRuleDifferentValueTypes(): void
     {
         // 测试字符串值的规则
         $stringValueRule = new class implements Rule {

@@ -2,17 +2,22 @@
 
 namespace Tourze\RBAC\Core\Tests\Level0;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Level0\Session;
 use Tourze\RBAC\Core\Level0\User;
 
-class UserTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(User::class)]
+final class UserTest extends TestCase
 {
     /**
      * 测试 User 接口的基本实现
      */
-    public function testUser_basicImplementation(): void
+    public function testUserBasicImplementation(): void
     {
         // 创建角色
         $adminRole = new class implements Role {
@@ -29,7 +34,10 @@ class UserTest extends TestCase
 
         // 创建 User 实现
         $user = new class($adminRole) implements User {
+            /** @var array<Role> */
             private array $roles;
+
+            /** @var array<Session> */
             private array $sessions;
 
             public function __construct(Role $role)
@@ -58,7 +66,7 @@ class UserTest extends TestCase
     /**
      * 测试用户拥有多个角色
      */
-    public function testUser_withMultipleRoles(): void
+    public function testUserWithMultipleRoles(): void
     {
         // 创建角色
         $adminRole = new class implements Role {
@@ -87,9 +95,13 @@ class UserTest extends TestCase
 
         // 创建 User 实现
         $user = new class([$adminRole, $editorRole]) implements User {
+            /** @var array<Role> */
             private array $roles;
+
+            /** @var array<Session> */
             private array $sessions;
 
+            /** @param array<Role> $roles */
             public function __construct(array $roles)
             {
                 $this->roles = $roles;
@@ -116,7 +128,7 @@ class UserTest extends TestCase
     /**
      * 测试用户拥有会话
      */
-    public function testUser_withSessions(): void
+    public function testUserWithSessions(): void
     {
         $self = $this;
 
@@ -149,9 +161,13 @@ class UserTest extends TestCase
         // 创建会话
         $session1 = new class(1, $user, [$adminRole]) implements Session {
             private int $id;
+
             private User $user;
+
+            /** @var array<Role> */
             private array $roles;
 
+            /** @param array<Role> $roles */
             public function __construct(int $id, User $user, array $roles)
             {
                 $this->id = $id;
@@ -178,8 +194,11 @@ class UserTest extends TestCase
         // 创建有会话的用户
         $userWithSession = new class($user, [$session1]) implements User {
             private User $userDelegate;
+
+            /** @var array<Session> */
             private array $sessions;
 
+            /** @param array<Session> $sessions */
             public function __construct(User $userDelegate, array $sessions)
             {
                 $this->userDelegate = $userDelegate;
@@ -206,7 +225,7 @@ class UserTest extends TestCase
     /**
      * 测试用户没有角色
      */
-    public function testUser_withNoRoles(): void
+    public function testUserWithNoRoles(): void
     {
         // 创建无角色用户
         $user = new class implements User {

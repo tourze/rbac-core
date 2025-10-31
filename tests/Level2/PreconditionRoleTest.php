@@ -2,16 +2,21 @@
 
 namespace Tourze\RBAC\Core\Tests\Level2;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Level2\PreconditionRole;
 
-class PreconditionRoleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(PreconditionRole::class)]
+final class PreconditionRoleTest extends TestCase
 {
     /**
      * 测试 PreconditionRole 接口的基本实现
      */
-    public function testPreconditionRole_basicImplementation(): void
+    public function testPreconditionRoleBasicImplementation(): void
     {
         // 创建前置条件角色
         $userRole = new class implements Role {
@@ -62,7 +67,7 @@ class PreconditionRoleTest extends TestCase
     /**
      * 测试多级前置条件角色
      */
-    public function testPreconditionRole_chainedPreconditions(): void
+    public function testPreconditionRoleChainedPreconditions(): void
     {
         // 创建基础角色
         $userRole = new class implements Role {
@@ -144,7 +149,7 @@ class PreconditionRoleTest extends TestCase
     /**
      * 测试没有前置条件的角色
      */
-    public function testPreconditionRole_withNoPrecondition(): void
+    public function testPreconditionRoleWithNoPrecondition(): void
     {
         // 创建没有前置条件的角色
         $baseRole = new class implements Role, PreconditionRole {
@@ -173,7 +178,7 @@ class PreconditionRoleTest extends TestCase
     /**
      * 测试前置条件角色的循环引用（理论上不应该存在）
      */
-    public function testPreconditionRole_circularReference(): void
+    public function testPreconditionRoleCircularReference(): void
     {
         // 创建角色1，暂时无前置条件
         $role1 = new class implements Role, PreconditionRole {
@@ -194,7 +199,7 @@ class PreconditionRoleTest extends TestCase
                 $this->preconditionRole = $role;
             }
 
-            public function getPreconditionRole(): Role
+            public function getPreconditionRole(): ?Role
             {
                 return $this->preconditionRole;
             }
@@ -240,9 +245,9 @@ class PreconditionRoleTest extends TestCase
         $current = $role1;
         $hasCircular = false;
 
-        while ($current instanceof PreconditionRole && $current->getPreconditionRole() !== null) {
+        while ($current instanceof PreconditionRole && null !== $current->getPreconditionRole()) {
             $currentName = $current->getName();
-            if (in_array($currentName, $visited)) {
+            if (in_array($currentName, $visited, true)) {
                 $hasCircular = true;
                 break;
             }

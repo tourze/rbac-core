@@ -2,17 +2,22 @@
 
 namespace Tourze\RBAC\Core\Tests\Level0;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Level0\Session;
 use Tourze\RBAC\Core\Level0\User;
 
-class SessionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Session::class)]
+final class SessionTest extends TestCase
 {
     /**
      * 测试 Session 接口的基本实现
      */
-    public function testSession_basicImplementation(): void
+    public function testSessionBasicImplementation(): void
     {
         // 创建角色
         $adminRole = new class implements Role {
@@ -43,9 +48,13 @@ class SessionTest extends TestCase
         // 创建会话
         $session = new class(1, $user, [$adminRole]) implements Session {
             private int $id;
+
             private User $user;
+
+            /** @var array<Role> */
             private array $roles;
 
+            /** @param array<Role> $roles */
             public function __construct(int $id, User $user, array $roles)
             {
                 $this->id = $id;
@@ -79,7 +88,7 @@ class SessionTest extends TestCase
     /**
      * 测试会话具有多个角色
      */
-    public function testSession_withMultipleRoles(): void
+    public function testSessionWithMultipleRoles(): void
     {
         // 创建角色
         $adminRole = new class implements Role {
@@ -122,9 +131,13 @@ class SessionTest extends TestCase
         // 创建多角色会话
         $session = new class(1, $user, [$adminRole, $editorRole]) implements Session {
             private int $id;
+
             private User $user;
+
+            /** @var array<Role> */
             private array $roles;
 
+            /** @param array<Role> $roles */
             public function __construct(int $id, User $user, array $roles)
             {
                 $this->id = $id;
@@ -159,7 +172,7 @@ class SessionTest extends TestCase
     /**
      * 测试空角色会话
      */
-    public function testSession_withNoRoles(): void
+    public function testSessionWithNoRoles(): void
     {
         // 创建用户
         $user = new class implements User {
@@ -177,9 +190,13 @@ class SessionTest extends TestCase
         // 创建空角色会话
         $session = new class(1, $user, []) implements Session {
             private int $id;
+
             private User $user;
+
+            /** @var array<Role> */
             private array $roles;
 
+            /** @param array<Role> $roles */
             public function __construct(int $id, User $user, array $roles)
             {
                 $this->id = $id;
@@ -212,7 +229,7 @@ class SessionTest extends TestCase
     /**
      * 测试不同 ID 的会话
      */
-    public function testSession_withDifferentIds(): void
+    public function testSessionWithDifferentIds(): void
     {
         // 创建用户
         $user = new class implements User {
@@ -231,9 +248,13 @@ class SessionTest extends TestCase
         $createSession = function (int $id) use ($user) {
             return new class($id, $user, []) implements Session {
                 private int $id;
+
                 private User $user;
+
+                /** @var array<Role> */
                 private array $roles;
 
+                /** @param array<Role> $roles */
                 public function __construct(int $id, User $user, array $roles)
                 {
                     $this->id = $id;

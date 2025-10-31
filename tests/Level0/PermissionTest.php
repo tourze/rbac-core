@@ -2,15 +2,20 @@
 
 namespace Tourze\RBAC\Core\Tests\Level0;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Permission;
 
-class PermissionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Permission::class)]
+final class PermissionTest extends TestCase
 {
     /**
      * 测试 Permission 接口的基本实现
      */
-    public function testPermission_basicImplementation(): void
+    public function testPermissionBasicImplementation(): void
     {
         // 创建 Permission 接口的匿名实现
         $permission = new class implements Permission {
@@ -39,7 +44,7 @@ class PermissionTest extends TestCase
     /**
      * 测试 Permission 具有父级权限
      */
-    public function testPermission_withParentPermission(): void
+    public function testPermissionWithParentPermission(): void
     {
         // 创建父级权限
         $parentPermission = new class implements Permission {
@@ -95,7 +100,7 @@ class PermissionTest extends TestCase
     /**
      * 测试多级权限嵌套
      */
-    public function testPermission_multiLevelHierarchy(): void
+    public function testPermissionMultiLevelHierarchy(): void
     {
         // 创建顶级权限
         $rootPermission = new class implements Permission {

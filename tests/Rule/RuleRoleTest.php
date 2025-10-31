@@ -2,18 +2,23 @@
 
 namespace Tourze\RBAC\Core\Tests\Rule;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Rule\Rule;
 use Tourze\RBAC\Core\Rule\RuleRole;
 use Tourze\RBAC\Core\Rule\RuleType;
 
-class RuleRoleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(RuleRole::class)]
+final class RuleRoleTest extends TestCase
 {
     /**
      * 测试 RuleRole 接口的基本实现
      */
-    public function testRuleRole_basicImplementation(): void
+    public function testRuleRoleBasicImplementation(): void
     {
         // 创建规则
         $departmentRule = new class implements Rule {
@@ -76,7 +81,7 @@ class RuleRoleTest extends TestCase
     /**
      * 测试多规则的数据角色
      */
-    public function testRuleRole_multipleRules(): void
+    public function testRuleRoleMultipleRules(): void
     {
         // 创建部门规则
         $departmentRule = new class implements Rule {
@@ -126,6 +131,7 @@ class RuleRoleTest extends TestCase
 
         // 创建多规则数据角色
         $ruleRole = new class($departmentRule, $statusRule) implements Role, RuleRole {
+            /** @var array<Rule> */
             private array $rules;
 
             public function __construct(Rule $departmentRule, Rule $statusRule)
@@ -166,7 +172,7 @@ class RuleRoleTest extends TestCase
     /**
      * 测试无规则的数据角色
      */
-    public function testRuleRole_withNoRules(): void
+    public function testRuleRoleWithNoRules(): void
     {
         // 创建无规则数据角色
         $ruleRole = new class implements Role, RuleRole {
@@ -195,7 +201,7 @@ class RuleRoleTest extends TestCase
     /**
      * 测试不同类型规则的组合
      */
-    public function testRuleRole_mixedRuleTypes(): void
+    public function testRuleRoleMixedRuleTypes(): void
     {
         // 创建等于类型规则
         $equalRule = new class implements Rule {
@@ -268,6 +274,7 @@ class RuleRoleTest extends TestCase
 
         // 创建混合规则类型的数据角色
         $ruleRole = new class($equalRule, $gtRule, $lteRule) implements Role, RuleRole {
+            /** @var array<Rule> */
             private array $rules;
 
             public function __construct(Rule $equalRule, Rule $gtRule, Rule $lteRule)

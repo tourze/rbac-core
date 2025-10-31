@@ -2,16 +2,21 @@
 
 namespace Tourze\RBAC\Core\Tests\Level2;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\RBAC\Core\Level0\Role;
 use Tourze\RBAC\Core\Level2\MutexRole;
 
-class MutexRoleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(MutexRole::class)]
+final class MutexRoleTest extends TestCase
 {
     /**
      * 测试 MutexRole 接口的基本实现
      */
-    public function testMutexRole_basicImplementation(): void
+    public function testMutexRoleBasicImplementation(): void
     {
         // 创建审核员角色
         $reviewerRole = new class implements Role {
@@ -62,7 +67,7 @@ class MutexRoleTest extends TestCase
     /**
      * 测试与多个角色互斥
      */
-    public function testMutexRole_multipleExclusions(): void
+    public function testMutexRoleMultipleExclusions(): void
     {
         // 创建审计师角色
         $auditorRole = new class implements Role {
@@ -92,6 +97,7 @@ class MutexRoleTest extends TestCase
 
         // 创建出纳角色，与审计师和会计互斥
         $cashierRole = new class($auditorRole, $accountantRole) implements Role, MutexRole {
+            /** @var array<Role> */
             private array $mutexRoles;
 
             public function __construct(Role $auditor, Role $accountant)
@@ -126,7 +132,7 @@ class MutexRoleTest extends TestCase
     /**
      * 测试双向互斥关系
      */
-    public function testMutexRole_bidirectionalExclusion(): void
+    public function testMutexRoleBidirectionalExclusion(): void
     {
         // 创建审计师角色，会与会计互斥
         $auditorRole = new class implements Role, MutexRole {
@@ -149,7 +155,7 @@ class MutexRoleTest extends TestCase
 
             public function getMutexRoles(): array
             {
-                return $this->accountantRole !== null ? [$this->accountantRole] : [];
+                return null !== $this->accountantRole ? [$this->accountantRole] : [];
             }
         };
 
@@ -196,7 +202,7 @@ class MutexRoleTest extends TestCase
     /**
      * 测试没有互斥角色
      */
-    public function testMutexRole_withNoMutexRoles(): void
+    public function testMutexRoleWithNoMutexRoles(): void
     {
         // 创建没有互斥角色的角色
         $independentRole = new class implements Role, MutexRole {
